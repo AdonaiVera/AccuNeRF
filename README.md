@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://www.iu.org/">
-    <img align="right" src="./media/logo_iubh.png" width="100" alt="mit">
+    <img align="right" src="./media/logo_iubh_.png" width="100" alt="mit">
   </a>
 </div>
 
