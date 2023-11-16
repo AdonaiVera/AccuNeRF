@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://www.mit.edu/~arosinol/">
-    <img align="right" src="./media/logo_iubh.jpg" width="100" alt="mit">
+    <img align="right" src="./media/logo_iubh.png" width="100" alt="mit">
   </a>
 </div>
 
