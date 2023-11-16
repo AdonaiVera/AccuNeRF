@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://www.mit.edu/~arosinol/">
+  <a href="https://www.iu.org/">
     <img align="right" src="./media/logo_iubh.png" width="100" alt="mit">
   </a>
 </div>
