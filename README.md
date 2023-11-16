@@ -25,7 +25,7 @@
 </p>
 <p align="center">
   <a href="#">
-    <img src="./media/reconstruction_1.png" alt="" width="90%">
+    <img src="./media/reconstruction_1.jpg" alt="" width="90%">
   </a>
 </p>
 
