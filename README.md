@@ -18,16 +18,18 @@
   <!-- <h2 align="center">In Review</h2> -->
   <h3 align="center">
     <a href="https://arxiv.org/abs/">Paper</a> |
-    <a href="https://www.youtube.com/">Video</a> |
+    <a href="https://youtu.be/mkaa-u1oG0c">Video</a> |
     <!-- <a href="">Project Page</a>-->
   </h3>
   <div align="center"></div>
 </p>
+
 <p align="center">
   <a href="#">
     <img src="./media/reconstruction_1.png" alt="" width="90%">
   </a>
 </p>
+
 
 <details open="open" style='padding: 10px; border-radius:5px 30px 30px 5px; border-style: solid; border-width: 1px;'>
   <summary>Table of Contents</summary>
