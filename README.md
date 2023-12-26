@@ -42,6 +42,9 @@
       <a href="#run">Run</a>
     </li>
     <li>
+      <a href="#results">Results</a>
+    </li>
+    <li>
       <a href="#citation">Citation</a>
     </li>
     <li>
@@ -78,6 +81,27 @@ pending
 ## Run
 
 pending
+
+## Results
+<p align="center">
+  <a href="#">
+    <img src="./media/results1.png" alt="" width="90%">
+  </a>
+</p>
+
+<p align="center">
+  <a href="#">
+    <img src="./media/results2.png" alt="" width="90%">
+  </a>
+</p>
+
+<p align="center">
+  <a href="#">
+    <img src="./media/results2.png" alt="" width="90%">
+  </a>
+</p>
+
+
 
 ## Citation 📦
 
