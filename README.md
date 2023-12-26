@@ -97,7 +97,7 @@ pending
 
 <p align="center">
   <a href="#">
-    <img src="./media/results2.png" alt="" width="90%">
+    <img src="./media/results3.png" alt="" width="90%">
   </a>
 </p>
 
