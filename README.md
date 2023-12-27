@@ -41,8 +41,8 @@
     <li>
       <a href="#download-sample-data">Download Datasets</a>
     </li>
-      <li>
-      <a href="#Implementation"Implementation</a>
+    <li>
+      <a href="#Implementation">Implementation</a>
     </li>
     <li>
       <a href="#run">Run</a>
