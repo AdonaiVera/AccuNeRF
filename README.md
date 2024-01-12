@@ -15,22 +15,19 @@
     ·
     <a href="https://www.iu.de/hochschule/lehrende/grasnick-armin/"><strong>PROF. DR. ARMIN GRASNICK</strong></a>
   </p>
-  Accurate damage documentation post-automobile accidents are a significant challenge in the insurance industry. Traditional methods often fall short of precision and detail, leading to discrepancies in damage reports. In the United States alone, there are approximately 6 million car accidents yearly, resulting in over $160 billion in economic losses, including medical expenses and property damage (Administration, The National Highway Traffic Safety, 2023). In this context, our study introduces AccuNeRF, an innovative application of Neural Radiance Fields (NeRF), developed to construct digital twins of damaged vehicles using conventional smartphone video capture. Our research delves into the effectiveness and constraints of NeRF for precise 3D reconstruction of damaged vehicles, accounting for video quality and environmental factors. Additionally, we establish a comprehensive pipeline, guiding the transformation from input images to user-friendly digital twin interfaces, streamlining accident analysis. Notably, we introduce an innovative post-processing step utilizing a Denoising Autoencoder with Spatial Attention architecture (Point-DAE) to enhance point cloud quality, contributing to the overall robustness of our approach. These advancements serve as critical components of our research, advancing the field of digital vehicle reconstruction. Our findings could bridge the gap between current damage reporting limitations and the promise of cutting-edge machine learning tools, setting the stage for more accurate, swift, and detailed assessments in the insurance domain.
   <!-- <h2 align="center">In Review</h2> -->
   <h3 align="center">
     <a href="https://arxiv.org/abs/">Paper</a> |
-    <a href="https://youtu.be/mkaa-u1oG0c">Video</a> |
+    <a href="https://www.youtube.com/">Video</a> |
     <!-- <a href="">Project Page</a>-->
   </h3>
   <div align="center"></div>
 </p>
-
 <p align="center">
   <a href="#">
     <img src="./media/reconstruction_1.png" alt="" width="90%">
   </a>
 </p>
-
 
 <details open="open" style='padding: 10px; border-radius:5px 30px 30px 5px; border-style: solid; border-width: 1px;'>
   <summary>Table of Contents</summary>
@@ -42,13 +39,7 @@
       <a href="#download-sample-data">Download Datasets</a>
     </li>
     <li>
-      <a href="#Implementation">Implementation</a>
-    </li>
-    <li>
       <a href="#run">Run</a>
-    </li>
-    <li>
-      <a href="#results">Results</a>
     </li>
     <li>
       <a href="#citation">Citation</a>
@@ -84,46 +75,118 @@ conda activate accunerf
 
 pending
 
-## Implementation
-In the implementation phase, we bring our research to fruition, transforming the proposed methodology into a functional software application known as AccuNeRF. This section will delve into the various components of the AccuNeRF pipeline, illustrating how each stage contributes to the precise 3D reconstruction of accident scenes. The pipeline outlined below represents an intricate system engineered to transform single-camera imagery into a vividly detailed three-dimensional space. It is a composite framework that amalgamates the 3D surface reconstruction prowess of Nerfacto. From the initial phase of image capture to the final rendering, the pipeline employs a series of interconnected modules, each specialized for a critical aspect of the scene creation process. The intricacies of these modules and their interplay are visually depicted in the subsequent diagram, providing a clear depiction of the pipeline's methodology and its holistic approach to 3D scene construction and enhancement (see Image below).
+## External modules
 
-<p align="center">
-  <a href="#">
-    <img src="https://github.com/AdonaiVera/AccuNeRF/assets/45982251/fa8e4473-a006-4c2f-83cc-8c1689a1cdac" alt="" width="90%">
-  </a>
-</p>
+git submodule add https://github.com/colmap/colmap colmap
+git submodule add https://github.com/nerfstudio-project/nerfstudio nerfstudio
+git submodule add https://github.com/LAStools LAStools
+
+
+## Train your own data
 
 
 ## Run
 
-pending
+EXPERIMENT=AccuNerf_2
+GROUP=AccuNerf_2_group
+NAME=AccuNerf_2
+CONFIG=projects/neuralangelo/configs/custom/${EXPERIMENT}.yaml
+GPUS=1  # use >1 for multi-GPU training!
+torchrun --nproc_per_node=${GPUS} train.py \
+    --logdir=logs/${GROUP}/${NAME} \
+    --config=${CONFIG} \
+    --show_pbar \
+    --data.readjust.scale=0.5 \
+    --max_iter=10000 \
+    --validation_iter=99999999 \
+    --model.object.sdf.encoding.coarse2fine.step=200 \
+    --model.object.sdf.encoding.hashgrid.dict_size=19 \
+    --optim.sched.warm_up_end=200 \
+    --optim.sched.two_steps=[12000,16000]
 
 
-
-## Results
-<p align="center">
-  <a href="#">
-    <img src="./media/results1.png" alt="" width="90%">
-  </a>
-</p>
-
-<p align="center">
-  <a href="#">
-    <img src="./media/results2.png" alt="" width="90%">
-  </a>
-</p>
-
-<p align="center">
-  <a href="#">
-    <img src="./media/results3.png" alt="" width="90%">
-  </a>
-</p>
-
-
+CHECKPOINT=logs/${GROUP}/${NAME}/epoch_01555_iteration_000420000_checkpoint.pt
+OUTPUT_MESH=logs/${GROUP}/${NAME}/neurangelo_result_2.ply
+CONFIG=logs/${GROUP}/${NAME}/config.yaml
+RESOLUTION=2048 # 300
+BLOCK_RES=128
+GPUS=1  # use >1 for multi-GPU mesh extraction
+torchrun --nproc_per_node=${GPUS} projects/neuralangelo/scripts/extract_mesh.py \
+    --config=${CONFIG} \
+    --checkpoint=${CHECKPOINT} \
+    --output_file=${OUTPUT_MESH} \
+    --resolution=${RESOLUTION} \
+    --block_res=${BLOCK_RES} \
+    --textured
 
 ## Citation 📦
 
-pending
+
+# Install Potree
+# Install Nerfstudio
+# Install colmap
+git clone https://github.com/colmap/colmap
+cd colmap
+mkdir build
+cd build
+cmake .. -DCMAKE_CUDA_ARCHITECTURES=all -GNinja
+ninja
+sudo ninja install
+
+
+# Install potree convert and add automatic step.
+
+
+
+
+# Install Potree convert
+sudo apt-get install python-software-properties git
+sudo apt-get install build-essential cmake g++
+sudo apt-get install libboost-all-dev
+sudo apt-get install cmake-curses-gui
+sudo apt-get install gcc
+
+LAS Tools
+git clone https://github.com/m-schuetz/LAStools.git
+cd LAStools/LASzip
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make
+
+Potre Converter
+git clone https://github.com/potree/PotreeConverter.git
+cd PotreeConverter
+mkdir build && cd build
+
+# Change for the path that you have in local
+sudo cmake -DCMAKE_BUILD_TYPE=Release -DLASZIP_INCLUDE_DIRS=/home/ado/Documents/potree/LAStools/LASzip/dll -DLASZIP_LIBRARY=/home/ado/Documents/potree/LAStools/LASzip/build/src/liblaszip.so ..
+sudo make && sudo make install
+sudo ln -s ~/LAStools/LASzip/build/src/liblaszip.so /usr/lib
+PotreeConverter -h
+
+
+./PotreeConverter/build/PotreeConverter  "/home/ado/Documents/potree/pointclouds/base_accunerf/point_cloud.ply" -o  "/home/ado/Documents/potree/pointclouds/base_accunerf/results"
+/home/ado/Documents/potree/pointclouds/base_accunerf
+
+
+PotreeConverter_linux_x64/PotreeConverter  "/home/ado/Documents/potree/pointclouds/base_accunerf/point_cloud.ply" -o  "/home/ado/Documents/potree/pointclouds/base_accunerf/results"
+PotreeConverter_linux_x64
+
+
+
+apt-get update && apt-get install -y \
+    cmake g++ git libtbb-dev libtbb-dev && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+
+RUN git clone https://github.com/potree/PotreeConverter.git
+
+# PotreeConverter
+#  6cd121bc92b279461dd4116283939ae0067f4aa1 = version 2.1
+#  d9387d52807bf8936fe98096b9992ea13b50ba94 = latest develop Dec 2, 2022
+RUN cd PotreeConverter && git checkout d9387d52807bf8936fe98096b9992ea13b50ba94 && mkdir build && cd build && \
+    cmake ../ && \
+    make
 
 ## License 📌
 

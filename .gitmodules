@@ -1,0 +1,9 @@
+[submodule "colmap"]
+	path = colmap
+	url = https://github.com/colmap/colmap
+[submodule "nerfstudio"]
+	path = nerfstudio
+	url = https://github.com/nerfstudio-project/nerfstudio
+[submodule "LAStools"]
+	path = LAStools
+	url = https://github.com/LAStools
