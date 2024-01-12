@@ -156,19 +156,9 @@ export class PropertiesPanel{
 
 					<li><span data-i18n="appearance.extra_range"></span>: <span id="lblExtraRange"></span> <div id="sldExtraRange"></div></li>
 
-					<li>
-						<selectgroup id="extra_gradient_repeat_option">
-							<option id="extra_gradient_repeat_clamp" value="CLAMP">Clamp</option>
-							<option id="extra_gradient_repeat_repeat" value="REPEAT">Repeat</option>
-							<option id="extra_gradient_repeat_mirrored_repeat" value="MIRRORED_REPEAT">Mirrored Repeat</option>
-						</selectgroup>
-					</li>
-
-					<li>
-						<span>Gradient Scheme:</span>
-						<div id="extra_gradient_scheme_selection" class="gradient_scheme" style="display: flex; padding: 1em 0em">
-						</div>
-					</li>
+					<li>Gamma: <span id="lblExtraGamma"></span> <div id="sldExtraGamma"></div></li>
+					<li>Brightness: <span id="lblExtraBrightness"></span> <div id="sldExtraBrightness"></div></li>
+					<li>Contrast: <span id="lblExtraContrast"></span> <div id="sldExtraContrast"></div></li>
 				</div>
 				
 				<div id="materials.matcap_container">
@@ -207,7 +197,7 @@ export class PropertiesPanel{
 
 					<li>
 						<span>Gradient Scheme:</span>
-						<div id="elevation_gradient_scheme_selection" class="gradient_scheme" style="display: flex; padding: 1em 0em">
+						<div id="elevation_gradient_scheme_selection" style="display: flex; padding: 1em 0em">
 						</div>
 					</li>
 				</div>
@@ -551,26 +541,24 @@ export class PropertiesPanel{
 		{
 			const schemes = Object.keys(Potree.Gradients).map(name => ({name: name, values: Gradients[name]}));
 
-			let elSchemeContainers = panel.find("div.gradient_scheme");
+			let elSchemeContainer = panel.find("#elevation_gradient_scheme_selection");
 
 			for(let scheme of schemes){
-				elSchemeContainers.each(function(index, container){
-					let elScheme = $(`
-						<span style="flex-grow: 1;">
-						</span>
-					`);
+				let elScheme = $(`
+					<span style="flex-grow: 1;">
+					</span>
+				`);
 
-					const svg = Potree.Utils.createSvgGradient(scheme.values);
-					svg.setAttributeNS(null, "class", `button-icon`);
+				const svg = Potree.Utils.createSvgGradient(scheme.values);
+				svg.setAttributeNS(null, "class", `button-icon`);
 
-					elScheme.append($(svg));
+				elScheme.append($(svg));
 
-					elScheme.click( () => {
-						material.gradient = Gradients[scheme.name];
-					});
-
-					$(container).append(elScheme);
+				elScheme.click( () => {
+					material.gradient = Gradients[scheme.name];
 				});
+
+				elSchemeContainer.append(elScheme);
 			}
 		}
 
@@ -822,19 +810,6 @@ export class PropertiesPanel{
 
 			{
 				let elGradientRepeat = panel.find("#gradient_repeat_option");
-				elGradientRepeat.selectgroup({title: "Gradient"});
-
-				elGradientRepeat.find("input").click( (e) => {
-					this.viewer.setElevationGradientRepeat(ElevationGradientRepeat[e.target.value]);
-				});
-
-				let current = Object.keys(ElevationGradientRepeat)
-					.filter(key => ElevationGradientRepeat[key] === this.viewer.elevationGradientRepeat);
-				elGradientRepeat.find(`input[value=${current}]`).trigger("click");
-			}
-
-			{
-				let elGradientRepeat = panel.find("#extra_gradient_repeat_option");
 				elGradientRepeat.selectgroup({title: "Gradient"});
 
 				elGradientRepeat.find("input").click( (e) => {

@@ -89,8 +89,7 @@
 
 		const elevationRange = [730, 790];
 		
-		//Potree.loadPointCloud("../pointclouds/vol_total/cloud.js", "Sorvilier", e => {
-		Potree.loadPointCloud("../pointclouds/base_accunerf/point_cloud.ply_converted/cloud.js", "Sorvilier", e => {	
+		Potree.loadPointCloud("../pointclouds/vol_total/cloud.js", "Sorvilier", e => {
 			const scene = viewer.scene;
 			const pointcloud = e.pointcloud;
 			
@@ -129,33 +128,6 @@
 	const elToolbar = $("#potree_toolbar");
 	elToolbar.html(`
 		<span>
-			<div class="potree_toolbar_label">
-				Upload Video
-			</div>
-			<div>
-				<label for="videoUploadInput">
-					<img src="${Potree.resourcePath}/icons/upload.svg" class="annotation-action-icon" style="width: 2em; height: auto; cursor: pointer;"/>
-				</label>
-				<input id="videoUploadInput" type="file" accept="video/*" style="display: none;" />
-			</div>
-		</span>
-		
-		<span class="potree_toolbar_separator" />
-
-		<span>
-			<div class="potree_toolbar_label">Model</div>
-			<div>
-				<select id="modelSelection">
-					<option value="nerfacto">nerfacto</option>
-					<option value="instant-ngp">instant-ngp</option>
-				</select>
-			</div>
-		</span>
-
-		<span class="potree_toolbar_separator" />
-
-		<span>
-			
 			<div class="potree_toolbar_label">
 				Attribute
 			</div>
@@ -338,49 +310,4 @@
 	</script>
 	
   </body>
-
-
-
-	<!-- Progress Bar and Loading Icon -->
-	<div id="progressContainer" style="display: none;">
-		<img src="loading_icon.gif" alt="Loading...">
-        <progress id="progressBar" value="0" max="100"></progress>
-    </div>
-
-
-
-  	<!-- Additional JavaScript for Video Upload -->
-  	<script type="text/javascript">
-		$(document).ready(function(){
-			$("#videoUploadInput").change(function(e){
-				let file = e.target.files[0];
-				if(file && file.type.startsWith('video/')){
-					// Process the video file
-					console.log("I have to do something here")
-					var formData = new FormData();
-					formData.append('video', file);
-
-					// Get the selected model and append it to formData
-					let selectedModel = $('#modelSelection').val();
-					formData.append('model', selectedModel);
-
-					$.ajax({
-						url: 'http://localhost:1235/upload_video', // Flask server endpoint 
-						type: 'POST',
-						data: formData,
-						contentType: false,
-						processData: false,
-						success: function(response) {
-							console.log("Video uploaded successfully.");
-						},
-						error: function(xhr, status, error) {
-							console.error("Upload failed:", error);
-						}
-					});	
-				} else {
-					alert("Please upload a valid video file.");
-				}
-			});
-		});
-	</script>
 </html>
